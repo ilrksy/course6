@@ -1,5 +1,8 @@
-import requests
+"""
+Module for detecting emotions in text using Watson NLP.
+"""
 import json
+import requests
 
 
 def emotion_detector(text_to_analyse):
@@ -20,7 +23,7 @@ def emotion_detector(text_to_analyse):
 
     myobj = {"raw_document": {"text": text_to_analyse}}
 
-    response = requests.post(url, json=myobj, headers=headers)
+    response = requests.post(url, json=myobj, headers=headers, timeout=10)
 
     # Handle blank / invalid input which the service flags with a 400
     if response.status_code == 400:

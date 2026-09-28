@@ -1,10 +1,60 @@
+"""
+Unit tests for the emotion detection module.
+"""
 import unittest
+from unittest.mock import patch
 from EmotionDetection.emotion_detection import emotion_detector
 
 
 class TestEmotionDetection(unittest.TestCase):
+    """
+    Test suite for the emotion_detector function.
+    """
 
-    def test_emotion_detector(self):
+    @patch('EmotionDetection.emotion_detection.requests.post')
+    def test_emotion_detector(self, mock_post):
+        """
+        Test the emotion_detector function with various expected dominant emotions.
+        """
+        mock_response_1 = unittest.mock.Mock()
+        mock_response_1.status_code = 200
+        mock_response_1.text = (
+            '{"emotionPredictions": [{"emotion": {"anger": 0.1, "disgust": 0.1, '
+            '"fear": 0.1, "joy": 0.9, "sadness": 0.1}}]}'
+        )
+
+        mock_response_2 = unittest.mock.Mock()
+        mock_response_2.status_code = 200
+        mock_response_2.text = (
+            '{"emotionPredictions": [{"emotion": {"anger": 0.9, "disgust": 0.1, '
+            '"fear": 0.1, "joy": 0.1, "sadness": 0.1}}]}'
+        )
+
+        mock_response_3 = unittest.mock.Mock()
+        mock_response_3.status_code = 200
+        mock_response_3.text = (
+            '{"emotionPredictions": [{"emotion": {"anger": 0.1, "disgust": 0.9, '
+            '"fear": 0.1, "joy": 0.1, "sadness": 0.1}}]}'
+        )
+
+        mock_response_4 = unittest.mock.Mock()
+        mock_response_4.status_code = 200
+        mock_response_4.text = (
+            '{"emotionPredictions": [{"emotion": {"anger": 0.1, "disgust": 0.1, '
+            '"fear": 0.1, "joy": 0.1, "sadness": 0.9}}]}'
+        )
+
+        mock_response_5 = unittest.mock.Mock()
+        mock_response_5.status_code = 200
+        mock_response_5.text = (
+            '{"emotionPredictions": [{"emotion": {"anger": 0.1, "disgust": 0.1, '
+            '"fear": 0.9, "joy": 0.1, "sadness": 0.1}}]}'
+        )
+
+        mock_post.side_effect = [
+            mock_response_1, mock_response_2, mock_response_3, mock_response_4, mock_response_5
+        ]
+
         result_1 = emotion_detector(
             "I am glad this happened"
         )
